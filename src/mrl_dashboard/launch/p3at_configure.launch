@@ -1,0 +1,51 @@
+<!-- -->
+<launch>
+
+	<!-- spawning robot -->
+	<arg name="robot_name" default="robot0"/>
+	<arg name="joy_type" default="logitech"/>
+ 	<arg name="init_x" default="0"/>
+ 	<arg name="init_y" default="0"/>
+ 	<arg name="init_z" default="0"/>
+ 	<arg name="init_yaw" default="0"/>
+ 	<arg name="scan_topic" default="hokuyo"/>
+ 	<arg name="map_width" default="100"/>
+ 	<arg name="map_height" default="100"/>
+ 	<arg name="nav_method" default="navfn"/> <!-- navfn, teb-->
+	<arg name="exp_method" default="explore_lite"/> 
+
+	<!-- joystick -->
+	<include file="$(find teleop_twist_joy)/launch/$(arg joy_type)_controller.launch"> 
+		<arg name="robot_name" value="$(arg robot_name)"/>
+	</include> 
+
+	<!-- slam node -->
+	<include file="$(find mrl_navigation)/launch/slam_gmapping.launch">
+		<arg name="robot_name" value="$(arg robot_name)"/>
+		<arg name="scan_topic" value="$(arg scan_topic)"/>
+		<arg name="width" value="$(arg map_width)"/>
+		<arg name="height" value="$(arg map_height)"/>
+	</include> 
+
+	<!-- slam & navigation -->
+	<include file="$(find mrl_navigation)/launch/$(arg nav_method)_move_base.launch"> 
+		<arg name="robot_name" value="$(arg robot_name)"/>
+	</include> 
+
+
+	<!-- exploration -->
+	<include file="$(find mrl_exploration)/launch/$(arg exp_method).launch"> 
+		<arg name="robot_name" value="$(arg robot_name)"/>
+	</include> 
+
+	<!--  ****** Maps Merge Node *****  -->
+	<group ns="/$(arg robot_name)/map_merge">
+	   	<remap from="scan" to="scan"/>
+		  <param name="init_pose_x" value="$(arg init_x)"/>
+		  <param name="init_pose_y" value="$(arg init_y)"/>
+		  <param name="init_pose_z" value="$(arg init_z)"/>
+		  <param name="init_pose_yaw" value="$(arg init_yaw)"/>
+	</group>
+
+</launch>
+

@@ -1,0 +1,13 @@
+# Logitech Attack3
+axis_linear: 1  # Forward/Back
+scale_linear: 1.5
+scale_linear_turbo: 2.1
+
+axis_angular: 0  # Left/Right
+scale_angular: 1.5
+
+enable_button: 0  # Trigger
+enable_turbo_button: 1  # Button 2 aka thumb button
+high_speed_button: 1
+alive_victim_button: 4
+dead_victim_button: 3

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="rviz" default="true"/>
+
+  <node pkg="tf" type="static_transform_publisher" name="world" args="0 0 0 0 0 0 1 world map_merge_frame 100" />
+  <include file="$(find multirobot_map_merge)/launch/map_merge.launch"/>
+
+  <!--<node if="$(arg rviz)" pkg="rviz" type="rviz" name="rviz" args="-d $(find multirobot_map_merge)/launch/map_merge.rviz"/>-->
+</launch>

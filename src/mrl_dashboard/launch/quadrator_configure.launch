@@ -1,0 +1,15 @@
+<!-- -->
+<launch>
+
+	<!-- spawning robot -->
+	<arg name="robot_name" default="robot0"/>
+	<arg name="joy_type" default="logitech"/>
+
+	<!-- joystick -->
+	<include file="$(find hector_quadrotor_teleop)/launch/$(arg joy_type)_controller.launch"> 
+		<arg name="robot_name" value="$(arg robot_name)"/>
+	</include> 
+
+
+</launch>
+

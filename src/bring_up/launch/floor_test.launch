@@ -1,0 +1,25 @@
+<!-- -->
+<launch>
+
+	<!-- spawning robot -->
+	<arg name="robot_name" default="robot0"/>
+	<arg name="odom_frame" default="odom"/>
+	<arg name="laser_frame" default="hokuyo"/>
+	<arg name="num_floor" default="2"/>
+	<arg name="floor_height" default="4"/>
+	
+
+
+
+	<!--  ****** Teleop *****  -->
+	<node pkg="mrl_teleop_twist_keyboard" type="mrl_multi_floor_map.py" name="$(arg robot_name)_multi_floor"  output="screen" clear_params="true">
+	    <param name="robot_name" value="$(arg robot_name)"/>
+	    <param name="odom_frame" value="$(arg odom_frame)"/>
+	    <param name="laser_frame" value="$(arg laser_frame)"/>
+	    <param name="num_floor" value="$(arg num_floor)"/>
+	    <param name="floor_height" value="$(arg floor_height)"/>
+	</node>
+
+	
+</launch>
+

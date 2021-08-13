@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<package>
+  <name>bring_up</name>
+  <version>0.0.1</version>
+  <description>The bring_up package</description>
+
+  <maintainer email="golagha@gmail.com">Haj Mehdi va Mammad Agha</maintainer>
+
+  <license>BSD</license>
+
+  <author>Haj Mehdi va Mammad Agha</author>
+
+  <!-- Buildtool dependencies -->
+  <buildtool_depend>catkin</buildtool_depend>
+
+
+  <!-- build dependencies -->
+  <build_depend>rospy</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+
+  <build_depend>roscpp</build_depend>
+  <!-- runtime dependencies -->
+  <run_depend>rospy</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>geometry_msgs</run_depend>
+
+
+  <export>
+
+  </export>
+</package>
+

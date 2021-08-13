@@ -1,0 +1,6 @@
+<!-- -->
+<launch>
+<arg name="robot_name" default="robot0"/>
+<arg name="joy_config" default="off" />
+
+</launch>

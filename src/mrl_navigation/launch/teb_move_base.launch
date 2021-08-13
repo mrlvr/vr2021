@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+
+<launch>
+
+ 	<arg name="robot_name" default="robot0"/>
+ 	<arg name="init_x" default="0"/>
+ 	<arg name="init_y" default="0"/>
+ 	<arg name="init_z" default="0"/>
+ 	<arg name="init_yaw" default="0"/>
+        <group ns="$(arg robot_name)">
+	   	<param name="tf_prefix" value="$(arg robot_name)" />
+		<!--  ************** Navigation ***************  -->
+		<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+	  	  	<rosparam file="$(find mrl_navigation)/teb_config/diff_drive/costmap_common_params.yaml" command="load" ns="global_costmap" />
+	  	 	<rosparam file="$(find mrl_navigation)/teb_config/diff_drive/costmap_common_params.yaml" command="load" ns="local_costmap" />
+	  		<rosparam file="$(find mrl_navigation)/teb_config/diff_drive/local_costmap_params.yaml" command="load" />
+	  		<rosparam file="$(find mrl_navigation)/teb_config/diff_drive/global_costmap_params.yaml" command="load" />
+	  		<rosparam file="$(find mrl_navigation)/teb_config/diff_drive/teb_local_planner_params.yaml" command="load" />
+
+			<param name="base_global_planner" value="global_planner/GlobalPlanner" />
+			<param name="planner_frequency" value="3.0" />
+			<param name="planner_patience" value="5.0" />
+
+			<param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
+			<param name="controller_frequency" value="5.0" />
+
+			<param name="controller_patience" value="5.0" />
+			<param name="recovery_behavior_enabled" value="false" />
+
+                <param name="global_costmap/robot_base_frame" value="$(arg robot_name)/base_link" /> 
+                <param name="local_costmap/robot_base_frame" value="$(arg robot_name)/base_link" />
+                <param name="global_costmap/global_frame" value="$(arg robot_name)/map" /> 
+                <param name="local_costmap/local_frame" value="$(arg robot_name)/odom" />
+                <param name="local_costmap/global_frame" value="$(arg robot_name)/odom" />
+
+
+		</node>
+
+        </group>
+
+	<!--  ****** Maps Merge Node *****  
+	<group ns="/$(arg robot_name)/map_merge">
+	   	<remap from="scan" to="scan"/>
+		  <param name="init_pose_x" value="$(arg init_x)"/>
+		  <param name="init_pose_y" value="$(arg init_y)"/>
+		  <param name="init_pose_z" value="$(arg init_z)"/>
+		  <param name="init_pose_yaw" value="$(arg init_yaw)"/>
+	</group>-->
+
+	<!--  ****** Maps Server *****  
+	<node pkg="map_server" type="map_server" name="$(arg robot_name)_publisher"  output="screen">
+	    <param name="frame_id" value="$(arg robot_name)"/>
+	    <remap from="map" to="/$(arg robot_name)/map"/>
+	    <remap from="map_metadata" to="/$(arg robot_name)/map_metadata"/>
+	</node>
+
+	-->
+</launch>

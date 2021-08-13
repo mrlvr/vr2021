@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+
+<launch>
+    <arg name="robot_name" default="robot0"/>
+    <arg name="init_x" default="0"/>
+    <arg name="init_y" default="0"/>
+    <arg name="init_z" default="0"/>
+    <arg name="init_yaw" default="0"/>
+    
+    <arg name="no_static_map" default="false"/>
+
+    <arg name="base_global_planner" default="navfn/NavfnROS"/>
+    <arg name="base_local_planner" default="dwa_local_planner/DWAPlannerROS"/>
+       <group ns="$(arg robot_name)">
+
+	    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+
+	        <!-- <param name="tf_prefix" value="$(arg robot_name)" /> -->
+		<rosparam file="$(find mrl_navigation)/navfn_config/planner.yaml" command="load" />
+
+		<param name="base_global_planner" value="$(arg base_global_planner)"/>
+		<param name="planner_frequency" value="3.0" />
+		<param name="planner_patience" value="5.0" />
+
+		<param name="base_local_planner" value="$(arg base_local_planner)"/>
+		<param name="controller_frequency" value="5.0" />
+		
+		<!-- load costmap_common.yaml -->
+		<rosparam file="$(find mrl_navigation)/navfn_config/costmap_common.yaml" command="load" ns="global_costmap" />
+
+		<!-- local costmap params -->
+		<rosparam file="$(find mrl_navigation)/navfn_config/costmap_local.yaml" command="load" ns="local_costmap" />
+		<param name="local_costmap/width" value="10.0" />
+		<param name="local_costmap/height" value="10.0" />
+
+
+		<!-- static global cosmap -->
+		<rosparam file="$(find mrl_navigation)/navfn_config/costmap_global_static.yaml" command="load" ns="global_costmap" unless="$(arg no_static_map)" />
+
+		<!-- global costmap with kinect -->
+		<rosparam file="$(find mrl_navigation)/navfn_config/costmap_global_laser.yaml" command="load" ns="global_costmap" if="$(arg no_static_map)" />
+		<param name="global_costmap/width" value="100.0" if="$(arg no_static_map)" />
+		<param name="global_costmap/height" value="100.0" if="$(arg no_static_map)" />
+
+                <param name="global_costmap/robot_base_frame" value="$(arg robot_name)/base_link" /> 
+                <param name="local_costmap/robot_base_frame" value="$(arg robot_name)/base_link" />
+                <param name="global_costmap/global_frame" value="$(arg robot_name)/map" /> 
+                <param name="local_costmap/local_frame" value="$(arg robot_name)/odom" />
+                <param name="local_costmap/global_frame" value="$(arg robot_name)/odom" />
+
+	    </node>
+
+
+        </group> 
+        <!--<node name="rviz" pkg="rviz" type="rviz" args="-d $(find mrl_navigation)/launch/robot0-navigation.rviz"/>
+	  ****** Maps Merge Node ***** 
+	<group ns="/$(arg robot_name)/map_merge">
+	   	<remap from="scan" to="scan"/>
+		  <param name="init_pose_x" value="$(arg init_x)"/>
+		  <param name="init_pose_y" value="$(arg init_y)"/>
+		  <param name="init_pose_z" value="$(arg init_z)"/>
+		  <param name="init_pose_yaw" value="$(arg init_yaw)"/>
+	</group> -->
+
+</launch>

@@ -1,0 +1,6 @@
+#SavExpIntel Joy Config
+
+enable_button: 5  # RB set
+enable_turbo_button: 9  #AUT
+high_speed_button: 9
+

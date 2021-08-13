@@ -1,0 +1,52 @@
+<!-- -->
+<launch>
+
+	<!-- spawning robot -->
+	<arg name="robot_name" default="robot0"/>
+	<arg name="joy_type" default="logitech"/>
+ 	<arg name="init_x" default="0"/>
+ 	<arg name="init_y" default="0"/>
+ 	<arg name="init_z" default="0"/>
+ 	<arg name="init_yaw" default="0"/>
+	<!-- slam node -->
+	<include file="$(find mrl_navigation_v1)/launch/mrl_slam_gmapping.launch">
+		<arg name="robot_name" value="$(arg robot_name)"/>
+	</include> 
+
+	<!-- slam & navigation -->
+	<include file="$(find mrl_navigation_v1)/launch/p3at_move_base.launch"> 
+		<arg name="robot_name" value="$(arg robot_name)"/>
+	</include> 
+
+	<!--  ****** Teleop *****  -->
+	<node pkg="mrl_teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="$(arg robot_name)_keyboard_teleop"  output="screen" clear_params="true">
+	    <param name="robot_name" value="$(arg robot_name)"/>
+	</node>
+
+	<!-- joystick -->
+	<include file="$(find teleop_twist_joy)/launch/$(arg joy_type)_controller.launch"> 
+		<arg name="robot_name" value="$(arg robot_name)"/>
+	</include> 
+
+
+	<!-- exploration -->
+	<include file="$(find mrl_exploration)/launch/mrl_explore.launch"> 
+		<arg name="robot_name" value="$(arg robot_name)"/>
+	</include> 
+
+	<!--  ****** Maps Merge Node *****  -->
+	<group ns="/$(arg robot_name)/map_merge">
+	   	<remap from="scan" to="scan"/>
+		  <param name="init_pose_x" value="$(arg init_x)"/>
+		  <param name="init_pose_y" value="$(arg init_y)"/>
+		  <param name="init_pose_z" value="$(arg init_z)"/>
+		  <param name="init_pose_yaw" value="$(arg init_yaw)"/>
+	</group>
+
+
+
+	<!--  **************** Visualisation ****************
+       <node name="rviz_$(arg robot_name)" pkg="rviz" type="rviz" args="-d $(find bring_up)/rviz/$(arg robot_name)-navigation.rviz"/>
+  	-->
+</launch>
+
